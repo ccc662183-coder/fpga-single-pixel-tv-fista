@@ -1,0 +1,114 @@
+{
+  "stage": "5B",
+  "dataset": "text",
+  "baud": 1000000,
+  "measurement_count": 1024,
+  "pixel_count": 4096,
+  "outer_iterations_configured": 40,
+  "hardware": "AX7020 PL UART TV-FISTA; not a software reconstruction",
+  "chunks": [
+    {
+      "index": 0,
+      "words": 63,
+      "ack_count": 63
+    },
+    {
+      "index": 1,
+      "words": 63,
+      "ack_count": 126
+    },
+    {
+      "index": 2,
+      "words": 63,
+      "ack_count": 189
+    },
+    {
+      "index": 3,
+      "words": 63,
+      "ack_count": 252
+    },
+    {
+      "index": 4,
+      "words": 63,
+      "ack_count": 315
+    },
+    {
+      "index": 5,
+      "words": 63,
+      "ack_count": 378
+    },
+    {
+      "index": 6,
+      "words": 63,
+      "ack_count": 441
+    },
+    {
+      "index": 7,
+      "words": 63,
+      "ack_count": 504
+    },
+    {
+      "index": 8,
+      "words": 63,
+      "ack_count": 567
+    },
+    {
+      "index": 9,
+      "words": 63,
+      "ack_count": 630
+    },
+    {
+      "index": 10,
+      "words": 63,
+      "ack_count": 693
+    },
+    {
+      "index": 11,
+      "words": 63,
+      "ack_count": 756
+    },
+    {
+      "index": 12,
+      "words": 63,
+      "ack_count": 819
+    },
+    {
+      "index": 13,
+      "words": 63,
+      "ack_count": 882
+    },
+    {
+      "index": 14,
+      "words": 63,
+      "ack_count": 945
+    },
+    {
+      "index": 15,
+      "words": 63,
+      "ack_count": 1008
+    },
+    {
+      "index": 16,
+      "words": 16,
+      "ack_count": 1024
+    }
+  ],
+  "load_time_s": 0.088603,
+  "compute_poll_elapsed_s": 4.64374,
+  "compute_cycles": 224908613,
+  "compute_time_50mhz_s": 4.49817226,
+  "final_outer_iter_index": 39,
+  "completed_outer_iterations": 40,
+  "final_outer_iter": 40,
+  "status_poll_count": 24,
+  "result_read_time_s": 0.124592,
+  "output_sha256": "562f3b86a5eb5667a5449d10f40b2f24156e13cd0e4ea29037c2fb4efdab4019",
+  "mismatch_count": 0,
+  "first_mismatches": [],
+  "pixel_min": 534,
+  "pixel_max": 1275,
+  "pixel_sum": 4252431,
+  "image_file": "text_fpga_reconstruction.png",
+  "elapsed_s": 5.144213,
+  "all_pass": true
+}

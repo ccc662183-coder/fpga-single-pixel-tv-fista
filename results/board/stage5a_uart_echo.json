@@ -1,0 +1,91 @@
+{
+  "stage": "5A",
+  "baud_bps": 1000000,
+  "kind": "UART framed DATA_ECHO only; NOT FPGA image reconstruction",
+  "cases": [
+    {
+      "round": 1,
+      "payload_bytes": 0,
+      "sequence": 2,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request_wire_bytes": 10,
+      "response_wire_bytes": 10,
+      "elapsed_s": 0.000666,
+      "pass": true
+    },
+    {
+      "round": 1,
+      "payload_bytes": 8,
+      "sequence": 3,
+      "sha256": "84eb90748bf22daab971d31349ba90e438023ae3c020465ee5bb543f06086882",
+      "request_wire_bytes": 18,
+      "response_wire_bytes": 18,
+      "elapsed_s": 0.000967,
+      "pass": true
+    },
+    {
+      "round": 1,
+      "payload_bytes": 64,
+      "sequence": 4,
+      "sha256": "bf48163831467a3274e7beb713897d90e1210e2ea44ab01b15c621cbe6bd3aa1",
+      "request_wire_bytes": 74,
+      "response_wire_bytes": 74,
+      "elapsed_s": 0.002044,
+      "pass": true
+    },
+    {
+      "round": 1,
+      "payload_bytes": 256,
+      "sequence": 5,
+      "sha256": "be9e6463faa9d0fd6663862fce2b2a9bef8489d4224e5f64e3f4acad2bbb7bc1",
+      "request_wire_bytes": 266,
+      "response_wire_bytes": 266,
+      "elapsed_s": 0.006885,
+      "pass": true
+    },
+    {
+      "round": 2,
+      "payload_bytes": 0,
+      "sequence": 6,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request_wire_bytes": 10,
+      "response_wire_bytes": 10,
+      "elapsed_s": 0.000631,
+      "pass": true
+    },
+    {
+      "round": 2,
+      "payload_bytes": 8,
+      "sequence": 7,
+      "sha256": "7f12a4dfea580540d61ce0d9bfe5ab8b704c74c4cd0f9491f07baad62769e214",
+      "request_wire_bytes": 18,
+      "response_wire_bytes": 18,
+      "elapsed_s": 0.000976,
+      "pass": true
+    },
+    {
+      "round": 2,
+      "payload_bytes": 64,
+      "sequence": 8,
+      "sha256": "cd7dbdc2a58a51974abb310be36f955814abfab2b7ffa39a79c6eea9269d289b",
+      "request_wire_bytes": 74,
+      "response_wire_bytes": 74,
+      "elapsed_s": 0.002224,
+      "pass": true
+    },
+    {
+      "round": 2,
+      "payload_bytes": 256,
+      "sequence": 9,
+      "sha256": "74dde61311ad3e847e40589cd36f57953bc4c04822ffc3b807e9b7fde3c08eda",
+      "request_wire_bytes": 266,
+      "response_wire_bytes": 266,
+      "elapsed_s": 0.006991,
+      "pass": true
+    }
+  ],
+  "fpga_active_baud_bps": 1000000,
+  "elapsed_s": 0.226365,
+  "total_echo_payload_bytes": 656,
+  "all_pass": true
+}

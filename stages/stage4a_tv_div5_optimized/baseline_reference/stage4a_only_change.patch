@@ -1,0 +1,78 @@
+--- Stage3/tv_prox64_bram_q11.v
++++ Stage4A/tv_prox64_bram_q11.v
+@@ -168,7 +168,7 @@
+     wire signed [17:0] px_prev_ext = {{2{px_prev_hold[15]}}, px_prev_hold};
+     wire signed [17:0] py_prev_ext = {{2{py_prev_hold[15]}}, py_prev_hold};
+ 
+-    // Gradient and serial division by five: truncation toward zero of |g|*64/5.
++    // Gradient and radix-16 restoring divide by five: exact truncation of |g|*64/5.
+     reg signed [15:0] u_here, u_below, u_right;
+     reg signed [15:0] px_grad_hold, py_grad_hold;
+     wire signed [17:0] u_here_ext  = {{2{u_here[15]}},  u_here};
+@@ -185,14 +185,41 @@
+     reg [3:0] rem_x, rem_y;
+     reg [4:0] div_count;
+ 
+-    wire [3:0] trial_x = {rem_x[2:0], dividend_x[23]};
+-    wire [3:0] trial_y = {rem_y[2:0], dividend_y[23]};
+-    wire take_x = (trial_x >= 4'd5);
+-    wire take_y = (trial_y >= 4'd5);
+-    wire [3:0] next_rem_x = take_x ? (trial_x - 4'd5) : trial_x;
+-    wire [3:0] next_rem_y = take_y ? (trial_y - 4'd5) : trial_y;
+-    wire [23:0] next_quo_x = {quotient_x[22:0], take_x};
+-    wire [23:0] next_quo_y = {quotient_y[22:0], take_y};
++    // Radix-16 restoring divide by 5: consume 4 dividend bits per clock.
++    // All 4 substeps are combinational and bit-exact to four original clocks.
++    // For unsigned long division by constant 5, remainder is always 0..4.
++    wire [3:0] trial_x0 = {rem_x[2:0], dividend_x[23]};
++    wire take_x0 = (trial_x0 >= 4'd5);
++    wire [3:0] rem_x1 = take_x0 ? (trial_x0 - 4'd5) : trial_x0;
++    wire [3:0] trial_x1 = {rem_x1[2:0], dividend_x[22]};
++    wire take_x1 = (trial_x1 >= 4'd5);
++    wire [3:0] rem_x2 = take_x1 ? (trial_x1 - 4'd5) : trial_x1;
++    wire [3:0] trial_x2 = {rem_x2[2:0], dividend_x[21]};
++    wire take_x2 = (trial_x2 >= 4'd5);
++    wire [3:0] rem_x3 = take_x2 ? (trial_x2 - 4'd5) : trial_x2;
++    wire [3:0] trial_x3 = {rem_x3[2:0], dividend_x[20]};
++    wire take_x3 = (trial_x3 >= 4'd5);
++    wire [3:0] rem_x4 = take_x3 ? (trial_x3 - 4'd5) : trial_x3;
++    wire [3:0] next_rem_x = rem_x4;
++    wire [23:0] next_quo_x = {quotient_x[19:0], take_x0, take_x1, take_x2, take_x3};
++
++    // Radix-16 restoring divide by 5: consume 4 dividend bits per clock.
++    // All 4 substeps are combinational and bit-exact to four original clocks.
++    // For unsigned long division by constant 5, remainder is always 0..4.
++    wire [3:0] trial_y0 = {rem_y[2:0], dividend_y[23]};
++    wire take_y0 = (trial_y0 >= 4'd5);
++    wire [3:0] rem_y1 = take_y0 ? (trial_y0 - 4'd5) : trial_y0;
++    wire [3:0] trial_y1 = {rem_y1[2:0], dividend_y[22]};
++    wire take_y1 = (trial_y1 >= 4'd5);
++    wire [3:0] rem_y2 = take_y1 ? (trial_y1 - 4'd5) : trial_y1;
++    wire [3:0] trial_y2 = {rem_y2[2:0], dividend_y[21]};
++    wire take_y2 = (trial_y2 >= 4'd5);
++    wire [3:0] rem_y3 = take_y2 ? (trial_y2 - 4'd5) : trial_y2;
++    wire [3:0] trial_y3 = {rem_y3[2:0], dividend_y[20]};
++    wire take_y3 = (trial_y3 >= 4'd5);
++    wire [3:0] rem_y4 = take_y3 ? (trial_y3 - 4'd5) : trial_y3;
++    wire [3:0] next_rem_y = rem_y4;
++    wire [23:0] next_quo_y = {quotient_y[19:0], take_y0, take_y1, take_y2, take_y3};
+ 
+     wire signed [31:0] delta_x =
+         gx_neg ? -$signed({8'd0, quotient_x}) : $signed({8'd0, quotient_x});
+@@ -392,13 +419,13 @@
+                     state <= S_DIV_RUN;
+                 end
+                 S_DIV_RUN: begin
+-                    dividend_x <= {dividend_x[22:0], 1'b0};
+-                    dividend_y <= {dividend_y[22:0], 1'b0};
++                    dividend_x <= {dividend_x[19:0], 4'b0};
++                    dividend_y <= {dividend_y[19:0], 4'b0};
+                     quotient_x <= next_quo_x;
+                     quotient_y <= next_quo_y;
+                     rem_x <= next_rem_x;
+                     rem_y <= next_rem_y;
+-                    if (div_count == 5'd23)
++                    if (div_count == 5'd5)
+                         state <= S_SET_V;
+                     else
+                         div_count <= div_count + 1'b1;

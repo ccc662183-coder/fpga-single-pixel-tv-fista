@@ -1,0 +1,28 @@
+Stage-2B design rationale
+========================
+
+The original Stage-4 FWHT RTL is byte-identical to the previous Stage-2A
+package, as is the thin Stage-2A normalization wrapper. The same FWHT work RAM
+stores z, then the measured residual, then the adjoint transformed residual.
+
+The 4096 x 16 z_mem holds the original image while the FWHT work RAM is
+operating. The result is stored in an independent 4096 x 16 simple dual-port
+BRAM. The 1024 x 32 measurement BRAM is dynamically loaded with values from
+Python. A fixed 4096 x 1 mask ROM identifies measured transform positions.
+
+Because the FWHT RAM has a single synchronous port, the controller uses:
+  RES_READ -> RES_CAPTURE -> RES_WRITE  (4096 pixels)
+  GRAD_READ -> GRAD_CAPTURE -> GRAD_WRITE (4096 pixels).
+This avoids attempting simultaneous BRAM read and write and preserves the
+already-validated low-area butterfly unit. The measured-value counter is
+advanced only at selected mask positions; 1024 entries must be consumed.
+
+One 4096-point FWHT needs 98,305 simulation cycles from Stage-2A.
+Stage-2B executes two such transforms, plus 4096*3 residual and 4096*3 output
+scan states. The expected compute count is approximately 221,186 cycles,
+plus a small number of FSM state transitions. It is NOT an FPGA-measured result
+until the testbench reports compute cycles.
+
+The algorithm uses a residual+adjoint gradient step, not coefficient replacement.
+The latter may differ by one or more LSBs due to truncation, even though it is
+algebraically equivalent in real arithmetic at unit step size.

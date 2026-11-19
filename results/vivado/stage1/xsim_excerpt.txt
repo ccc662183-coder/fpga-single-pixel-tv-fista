@@ -1,0 +1,8 @@
+Source: vivado_project/sp_tv_stage1.sim/sim_1/behav/xsim/simulate.log
+Selected lines from the archived log; not a fresh XSim run.
+
+PASS: 64x64 BRAM TV Prox, all 4096 pixels match
+PASS: 35 Jacobi dual iterations, Q5.11 arithmetic
+PASS: output range=[107,1530], sum=3926432
+PASS: compute cycles=14703041
+ALL TESTS PASSED: Stage-1 64x64 BRAM TV Prox

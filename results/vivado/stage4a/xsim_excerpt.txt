@@ -1,0 +1,10 @@
+Source: vivado_project/sp_tv_fista_stage4a.sim/sim_1/behav/xsim/simulate.log
+Selected lines from the archived log; not a fresh XSim run.
+
+PASS: exact initial backprojection W^T*y and one FISTA iteration
+PASS: Stage-4A accelerated TV division; compute cycles=12521547
+PASS: output pixels 4096/4096 exact; errors=0
+PASS: range_error=0, protocol_error=0
+PASS: outer iterations=1, compute cycles=12521547
+PASS: final output range=[108,1530], sum=3930561
+ALL TESTS PASSED: Stage-3 TV-FISTA top-level integration

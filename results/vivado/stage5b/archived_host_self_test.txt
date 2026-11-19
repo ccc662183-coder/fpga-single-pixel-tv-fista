@@ -1,0 +1,12 @@
+PASS: Stage-4C 8 source modules SHA-256 match the frozen original
+PASS: verified AX7020 U18/N15/W19/W18 constraints copied
+PASS: CRC16-CCITT-FALSE 123456789 -> 0x29B1
+PASS: packet encode/decode lengths 0, 1, 8, 64, 256
+PASS: corrupted CRC rejected
+ALL TESTS PASSED: Stage-5A host-side protocol self-test
+PASS: cat64 1024 measurements -> 17 packets -> lossless little-endian round-trip
+PASS: moon 1024 measurements -> 17 packets -> lossless little-endian round-trip
+PASS: rocket 1024 measurements -> 17 packets -> lossless little-endian round-trip
+PASS: text 1024 measurements -> 17 packets -> lossless little-endian round-trip
+ALL TESTS PASSED: Stage-5B host protocol and dataset framing
+INFO: Verilog/XSim/synthesis/board execution must be performed in Vivado 2019.2

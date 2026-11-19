@@ -1,0 +1,31 @@
+STAGE 1 | 64x64 BRAM TV Prox reference vector
+================================================
+
+Input source:
+  Stage-0.2 accepted cat64 golden_vectors.npz
+  input = direct_q11, 64x64 row-major, signed Q5.11
+
+Reference:
+  Stage-0.2 tv_prox_q11(input, steps=35)
+  lambda = 20/2048
+  isotropic dual projection
+  Jacobi update, 35 iterations
+  final output = f + ((div(p)*20) >>> 11)
+
+Input range: [76, 1565]
+Expected output range: [107, 1530]
+Expected output sum: 3926432
+Expected px range: [-2048, 2048]
+Expected py range: [-2048, 2048]
+
+Runtime range telemetry:
+  max |divergence| = 6870
+  max |u| = 1565
+  max |gradient| = 869
+  max |dual update delta| = 11123
+  max |projection candidate| = 12787
+  max |dual variable| = 2048
+  output range = [107, 1530]
+  overflow counters = 0
+
+The expected output is a software integer reference. It is not an FPGA result.

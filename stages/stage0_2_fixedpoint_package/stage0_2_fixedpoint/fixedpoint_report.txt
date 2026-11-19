@@ -1,0 +1,86 @@
+STAGE 0.2 | 64x64 fixed-point TV-FISTA golden model
+====================================================
+Model status: PC fixed-point reference; NOT FPGA execution.
+Image: 64x64, 4096 pixels; row-major flattening.
+Measurements: 1024 / 4096 = 25%; Stage-0.1 low-sequency mask.
+Operator: W = H_4096 / 64; FWHT is unnormalized H, followed by arithmetic >>> 6.
+
+FIXED-POINT CONTRACT
+--------------------
+Primal image x, FISTA state x/z, TV dual p/q: signed 16-bit, 11 fractional bits (S16.F11 / Q5.11).
+Range of S16.F11: [-16, 15.99951171875]; 1.0 is integer 2048.
+FWHT work memory, normalized coefficients, measurements, residuals: signed 32-bit, 11 fractional bits (S32.F11).
+TV divergence / gradient intermediates: signed 18-bit or wider, 11 fractional bits; runtime range checks are enforced.
+TV lambda: integer 20 / 2048 = 0.009765625 (retains Stage-5C RTL convention; float baseline uses 0.01).
+TV u/f update: arithmetic right shift >>> 11 (floor for negative values).
+TV dual gradient scale: truncation toward zero of abs(grad)*64/5, then restore sign.
+TV projection: integer floor sqrt(vx^2+vy^2), rounded magnitude quotient, clamp vector norm to 1.0.
+TV dual update: Jacobi; p/q new arrays are computed from old p/q, then committed.
+FISTA beta: 16-bit unsigned coefficient with 15 fractional bits, beta_k=(t_(k-1)-1)/t_k; product uses arithmetic >>> 15.
+Input uint8 to Q5.11: round-to-nearest (pixel*2048+127)//255.
+Output: clip final Q5.11 image to [0, 2048], i.e. [0,1].
+
+LEGACY RTL CROSS-CHECKS
+-----------------------
+Stage-4 FWHT: PASS (4096/4096 exact coefficients).
+Stage-5B projection: PASS (128/128 exact vectors).
+Stage-5C TV prox: PASS (64/64 exact pixels; sum=59613, min=174, max=1748).
+
+64x64 IMAGE RESULTS
+-------------------
+cat64:
+  float direct PSNR = 27.0828 dB; float TV-FISTA = 28.4327 dB.
+  fixed direct PSNR = 27.0829 dB; fixed TV-FISTA = 28.4574 dB.
+  fixed TV gain = +1.3745 dB.
+  fixed-vs-float TV max abs error = 0.012337; RMSE = 0.000927.
+  max |raw FWHT| = 3930619; max |TV div|=6882 Q11 LSB.
+  max |TV u|=1565; max |TV grad|=954 Q11 LSB.
+  max |TV delta|=12211; max |projection candidate|=13542 Q11 LSB.
+  max |TV dual component|=2048; max |FISTA momentum product|=786768.
+  detected arithmetic overflow count = 0.
+
+moon:
+  float direct PSNR = 34.8569 dB; float TV-FISTA = 36.3094 dB.
+  fixed direct PSNR = 34.8568 dB; fixed TV-FISTA = 36.3411 dB.
+  fixed TV gain = +1.4843 dB.
+  fixed-vs-float TV max abs error = 0.003470; RMSE = 0.000305.
+  max |raw FWHT| = 3690241; max |TV div|=6606 Q11 LSB.
+  max |TV u|=1857; max |TV grad|=912 Q11 LSB.
+  max |TV delta|=11673; max |projection candidate|=13385 Q11 LSB.
+  max |TV dual component|=2048; max |FISTA momentum product|=591668.
+  detected arithmetic overflow count = 0.
+
+rocket:
+  float direct PSNR = 29.5630 dB; float TV-FISTA = 33.6310 dB.
+  fixed direct PSNR = 29.5622 dB; fixed TV-FISTA = 33.6420 dB.
+  fixed TV gain = +4.0799 dB.
+  fixed-vs-float TV max abs error = 0.004844; RMSE = 0.000404.
+  max |raw FWHT| = 2004982; max |TV div|=6923 Q11 LSB.
+  max |TV u|=1800; max |TV grad|=1227 Q11 LSB.
+  max |TV delta|=15705; max |projection candidate|=17305 Q11 LSB.
+  max |TV dual component|=2048; max |FISTA momentum product|=1123891.
+  detected arithmetic overflow count = 0.
+
+text:
+  float direct PSNR = 26.1999 dB; float TV-FISTA = 26.4661 dB.
+  fixed direct PSNR = 26.1996 dB; fixed TV-FISTA = 26.4751 dB.
+  fixed TV gain = +0.2755 dB.
+  fixed-vs-float TV max abs error = 0.002163; RMSE = 0.000373.
+  max |raw FWHT| = 4252444; max |TV div|=6961 Q11 LSB.
+  max |TV u|=1326; max |TV grad|=665 Q11 LSB.
+  max |TV delta|=8512; max |projection candidate|=9582 Q11 LSB.
+  max |TV dual component|=2048; max |FISTA momentum product|=608391.
+  detected arithmetic overflow count = 0.
+
+GLOBAL RANGE / DESIGN NOTES
+---------------------------
+All four 64x64 test images completed 40 outer x 35 inner iterations.
+All tested 16-bit Q5.11 TV states and TV projection candidates remained in range; no wrap/saturation was required.
+The 32-bit FWHT path remained within signed 32-bit range for the tested image set.
+The legacy 8-bit Stage-4 vector is retained as a separate compatibility test; the new algorithm path feeds Q5.11 pixels to the same 32-bit FWHT engine.
+The 1024 measurement values in the generated vectors are signed 32-bit Q11 coefficients, ordered by ascending row-major flattened mask index.
+The 4096-bit mask and measurement index list are generated from Stage-0.1's exact low-sequency mask. The FPGA may store this mask/indices in ROM.
+The fixed-point model's lambda=20/2048 is a quantized approximation of the Stage-0.1 float lambda=0.01. The small observed quality difference is reported rather than hidden.
+This stage does not implement UART, BRAM RTL, the 64x64 TV Prox hardware, or full FPGA top-level integration.
+
+OVERALL: PASS

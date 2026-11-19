@@ -1,0 +1,146 @@
+{
+  "scope": "PC ONLY; exploratory, no new FPGA bitstream created, no hardware quality claim",
+  "input_images": [
+    "cat64",
+    "moon",
+    "rocket",
+    "text"
+  ],
+  "measurement_count": 1024,
+  "resolution": "64x64",
+  "frozen_reference": "Stage-0.2 fixed-point golden, exact 4096/4096 per image",
+  "hardware_baseline": {
+    "lambda_q11": 20,
+    "outer_iters": 40,
+    "inner_iters": 35
+  },
+  "mask_restriction": "Changing mask requires FPGA mask ROM change / new bitstream and new matched measurements",
+  "lambda_restriction": "Stage-4A uses a fixed /5 divider; changing lambda requires corresponding RTL changes and re-verification",
+  "iteration_restriction": "Extending >40 outer loops requires ROM / control changes and re-verification",
+  "lambda_table": [
+    {
+      "lambda_q11": 11,
+      "mean_psnr_db": 31.52313533204878,
+      "mean_ssim": 0.8758461399959315,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 12,
+      "mean_psnr_db": 31.493028670895765,
+      "mean_ssim": 0.8745611686449047,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 13,
+      "mean_psnr_db": 31.46011182774766,
+      "mean_ssim": 0.8732708712251166,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 14,
+      "mean_psnr_db": 31.42725015163946,
+      "mean_ssim": 0.8718147956084915,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 15,
+      "mean_psnr_db": 31.39884267198881,
+      "mean_ssim": 0.8705773917130081,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 16,
+      "mean_psnr_db": 31.364136542422862,
+      "mean_ssim": 0.869180821169377,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 20,
+      "mean_psnr_db": 31.228901465129,
+      "mean_ssim": 0.8635037976021029,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 24,
+      "mean_psnr_db": 31.090083356733352,
+      "mean_ssim": 0.8576006122489312,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 28,
+      "mean_psnr_db": 30.953635326543093,
+      "mean_ssim": 0.8516690033968836,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 32,
+      "mean_psnr_db": 30.812845965918356,
+      "mean_ssim": 0.8456903914967753,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 40,
+      "mean_psnr_db": 30.547697456862583,
+      "mean_ssim": 0.8340498251362339,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 48,
+      "mean_psnr_db": 30.29197650220786,
+      "mean_ssim": 0.8229279834536198,
+      "image_count": 4
+    },
+    {
+      "lambda_q11": 64,
+      "mean_psnr_db": 29.808749945147397,
+      "mean_ssim": 0.8012253136443526,
+      "image_count": 4
+    }
+  ],
+  "best_mean_psnr_lambda_q11": 11,
+  "per_image_comparison": [
+    {
+      "image": "cat64",
+      "baseline_psnr": 28.457366245849375,
+      "candidate_psnr": 28.630452210131324,
+      "delta_psnr_db": 0.1730859642819489,
+      "baseline_ssim": 0.8722007231179993,
+      "candidate_ssim": 0.8820017357938831,
+      "delta_ssim": 0.009801012675883736
+    },
+    {
+      "image": "moon",
+      "baseline_psnr": 36.34113088229005,
+      "candidate_psnr": 36.8811470761888,
+      "delta_psnr_db": 0.5400161938987509,
+      "baseline_ssim": 0.9264141192150948,
+      "candidate_ssim": 0.9387494751050282,
+      "delta_ssim": 0.012335355889933397
+    },
+    {
+      "image": "rocket",
+      "baseline_psnr": 33.64202464712533,
+      "candidate_psnr": 33.97786916067447,
+      "delta_psnr_db": 0.3358445135491408,
+      "baseline_ssim": 0.944959779210168,
+      "candidate_ssim": 0.9521423596250631,
+      "delta_ssim": 0.007182580414895057
+    },
+    {
+      "image": "text",
+      "baseline_psnr": 26.475084085251233,
+      "candidate_psnr": 26.603072881200536,
+      "delta_psnr_db": 0.12798879594930312,
+      "baseline_ssim": 0.7104405688651497,
+      "candidate_ssim": 0.7304909894597514,
+      "delta_ssim": 0.020050420594601714
+    }
+  ],
+  "all_runs": 64,
+  "invalid_runs": 3,
+  "mask_sha256": {
+    "frozen_low1024": "2c90bf18625089b847b93229bfe1e3fcabc9cfd0d6342a9fec2ed0bbf4488069",
+    "mixed_low768_random256": "3ffacc8f3258f80f797de7b29f57a13f3261aecd26651d0406d7452afd296590",
+    "random1024": "4a5274bd042cc9ab70f38d9e9a0d69ab64f6421d5d23549d4b721ed19a3c3488"
+  }
+}

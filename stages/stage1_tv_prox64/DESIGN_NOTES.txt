@@ -1,0 +1,21 @@
+Stage-1 architecture notes
+==========================
+
+One pixel is processed at a time. The design deliberately serializes BRAM reads
+to avoid multi-read-port memories:
+- p_x/p_y current values are read first, then their predecessor values.
+- u[i], u[i+64], u[i+1] are read over separate synchronous BRAM cycles.
+- pnx/pny are written during the projection pass and committed to px/py only
+  after all 4096 pixels have been processed (Jacobi semantics).
+- A final pass computes f + lambda*div(p) using the committed dual field.
+
+The design is not optimized for throughput yet. It is a correctness-first
+BRAM implementation. The next optimization phase can introduce line buffers,
+dual-port/banked memories, pipelined arithmetic, or multiple pixels per cycle.
+
+Memory inference acceptance:
+- f/u/px/py/pnx/pny each infer synchronous single-port block RAM.
+- out_mem infers synchronous simple-dual-port block RAM.
+- Expected memory footprint is approximately 14 RAMB36 equivalents.
+- No 4096x16 array is reset in an always block; the p memories are explicitly
+  cleared by the S_INIT state so they remain BRAM-inferable.

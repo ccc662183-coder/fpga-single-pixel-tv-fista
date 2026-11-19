@@ -1,0 +1,31 @@
+Stage-6A | PC fixed-point quality-sweep results
+================================================
+Not an FPGA hardware experiment. Baseline 4 images checked bit-exact.
+Baseline: 64x64, 1024 measurements (25%), low-sequency mask, lambda_q11=20, 40x35.
+Sweep lambda values: [8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 24, 28, 32, 40, 48, 64]
+
+Lambda | Mean PSNR (dB) | Mean SSIM
+    11 |        31.5231 | 0.87585
+    12 |        31.4930 | 0.87456
+    13 |        31.4601 | 0.87327
+    14 |        31.4273 | 0.87181
+    15 |        31.3988 | 0.87058
+    16 |        31.3641 | 0.86918
+    20 |        31.2289 | 0.86350
+    24 |        31.0901 | 0.85760
+    28 |        30.9536 | 0.85167
+    32 |        30.8128 | 0.84569
+    40 |        30.5477 | 0.83405
+    48 |        30.2920 | 0.82293
+    64 |        29.8087 | 0.80123
+
+Best MEAN PSNR on these four images only: lambda Q11 = 11 (0.0053711)
+Per-image PSNR change compared with frozen lambda20:
+  cat64: 28.4574 -> 28.6305 dB (+0.1731 dB), SSIM 0.8722 -> 0.8820
+  moon: 36.3411 -> 36.8811 dB (+0.5400 dB), SSIM 0.9264 -> 0.9387
+  rocket: 33.6420 -> 33.9779 dB (+0.3358 dB), SSIM 0.9450 -> 0.9521
+  text: 26.4751 -> 26.6031 dB (+0.1280 dB), SSIM 0.7104 -> 0.7305
+
+Do NOT reclassify this parameter sweep as a validated FPGA result.
+Do NOT assume tuned lambda generalizes to unseen or real optical datasets.
+See summary.json for mask and RTL compatibility risks.

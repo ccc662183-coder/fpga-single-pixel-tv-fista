@@ -1,0 +1,114 @@
+{
+  "stage": "5B",
+  "dataset": "cat64",
+  "baud": 1000000,
+  "measurement_count": 1024,
+  "pixel_count": 4096,
+  "outer_iterations_configured": 40,
+  "hardware": "AX7020 PL UART TV-FISTA; not a software reconstruction",
+  "chunks": [
+    {
+      "index": 0,
+      "words": 63,
+      "ack_count": 63
+    },
+    {
+      "index": 1,
+      "words": 63,
+      "ack_count": 126
+    },
+    {
+      "index": 2,
+      "words": 63,
+      "ack_count": 189
+    },
+    {
+      "index": 3,
+      "words": 63,
+      "ack_count": 252
+    },
+    {
+      "index": 4,
+      "words": 63,
+      "ack_count": 315
+    },
+    {
+      "index": 5,
+      "words": 63,
+      "ack_count": 378
+    },
+    {
+      "index": 6,
+      "words": 63,
+      "ack_count": 441
+    },
+    {
+      "index": 7,
+      "words": 63,
+      "ack_count": 504
+    },
+    {
+      "index": 8,
+      "words": 63,
+      "ack_count": 567
+    },
+    {
+      "index": 9,
+      "words": 63,
+      "ack_count": 630
+    },
+    {
+      "index": 10,
+      "words": 63,
+      "ack_count": 693
+    },
+    {
+      "index": 11,
+      "words": 63,
+      "ack_count": 756
+    },
+    {
+      "index": 12,
+      "words": 63,
+      "ack_count": 819
+    },
+    {
+      "index": 13,
+      "words": 63,
+      "ack_count": 882
+    },
+    {
+      "index": 14,
+      "words": 63,
+      "ack_count": 945
+    },
+    {
+      "index": 15,
+      "words": 63,
+      "ack_count": 1008
+    },
+    {
+      "index": 16,
+      "words": 16,
+      "ack_count": 1024
+    }
+  ],
+  "load_time_s": 0.084079,
+  "compute_poll_elapsed_s": 5.049714,
+  "compute_cycles": 242929421,
+  "compute_time_50mhz_s": 4.85858842,
+  "final_outer_iter_index": 39,
+  "completed_outer_iterations": 40,
+  "final_outer_iter": 40,
+  "status_poll_count": 26,
+  "result_read_time_s": 0.155145,
+  "output_sha256": "04855269bc2a0923cc3f26f174f22f47a21c2379630ad1f2767d1ea9917660d9",
+  "mismatch_count": 0,
+  "first_mismatches": [],
+  "pixel_min": 81,
+  "pixel_max": 1526,
+  "pixel_sum": 3930589,
+  "image_file": "cat64_fpga_reconstruction.png",
+  "elapsed_s": 5.713616,
+  "all_pass": true
+}

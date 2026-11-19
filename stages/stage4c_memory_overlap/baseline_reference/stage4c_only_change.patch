@@ -1,0 +1,136 @@
+--- stage4b/rtl/tv_prox64_bram_q11.v
++++ stage4c/rtl/tv_prox64_bram_q11.v
+@@ -8,6 +8,9 @@
+ //   (px_new,py_new) = isotropic_project(px+delta_x,py+delta_y)
+ // All dual updates are Jacobi: pn_x/pn_y are committed only after a full image pass.
+ //
++// Stage-4C: overlap current u/final output writeback with prefetch of
++// next f/px/py pixel, and fold divergence and signed weight into two
++// adjacent states. The BRAM bank count and arithmetic truncation are unchanged.
+ // Memory organization:
+ //   f_mem, u_mem, px_mem, py_mem, pnx_mem, pny_mem: 6 x 4096x16 SP BRAM
+ //   out_mem: 1 x 4096x16 simple-dual-port BRAM
+@@ -156,17 +159,22 @@
+     // Input and pipeline registers.
+     reg signed [15:0] f_hold;
+     reg signed [15:0] px_cur_hold, py_cur_hold;
+-    reg signed [15:0] px_prev_hold, py_prev_hold;
++    // Neighbor dual values are captured directly from synchronous BRAM outputs
++    // during S_U_CAPTURE_PREV / S_F_CAPTURE_PREV (no extra holding cycle).
+     reg signed [17:0] div_hold;
+-    reg signed [31:0] weighted_hold;
+-
++    // Move the exact signed *20 and arithmetic >>11 into the BRAM write cycle.
++    // This removes one registered S_U_WEIGHT/S_F_WEIGHT cycle without
++    // changing 32-bit signed intermediate/truncation semantics.
++    wire signed [31:0] weighted_comb = $signed(div_hold) * 32'sd20;
+     wire signed [31:0] updated_wide =
+-        $signed(f_hold) + ($signed(weighted_hold) >>> 11);
++        $signed(f_hold) + (weighted_comb >>> 11);
+ 
+     wire signed [17:0] px_cur_ext  = {{2{px_cur_hold[15]}},  px_cur_hold};
+     wire signed [17:0] py_cur_ext  = {{2{py_cur_hold[15]}},  py_cur_hold};
+-    wire signed [17:0] px_prev_ext = {{2{px_prev_hold[15]}}, px_prev_hold};
+-    wire signed [17:0] py_prev_ext = {{2{py_prev_hold[15]}}, py_prev_hold};
++    wire signed [17:0] px_prev_ext = first_row ? 18'sd0 :
++        $signed({{2{px_dout[15]}},px_dout});
++    wire signed [17:0] py_prev_ext = first_col ? 18'sd0 :
++        $signed({{2{py_dout[15]}},py_dout});
+ 
+     // Gradient and radix-16 restoring divide by five: exact truncation of |g|*64/5.
+     reg signed [15:0] u_here, u_below, u_right;
+@@ -273,8 +281,15 @@
+                 py_en = 1'b1; py_addr = prev_y_addr;
+             end
+             S_U_WRITE: begin
++                // Different BRAM banks: write current u[i] while prefetching
++                // f[i+1],px[i+1],py[i+1] for the next pixel.
+                 u_en = 1'b1; u_we = 1'b1; u_addr = index;
+                 u_din = updated_wide[15:0];
++                if (index != 12'd4095) begin
++                    f_en = 1'b1; f_addr = index + 12'd1;
++                    px_en = 1'b1; px_addr = index + 12'd1;
++                    py_en = 1'b1; py_addr = index + 12'd1;
++                end
+             end
+ 
+             S_G_READ_HERE: begin
+@@ -314,7 +329,14 @@
+                 py_en = 1'b1; py_addr = prev_y_addr;
+             end
+             S_F_WRITE: begin
++                // Final image is a separate memory bank; overlap its write
++                // with the next f/px/py synchronous reads.
+                 out_we = 1'b1; out_addr = index; out_din = updated_wide[15:0];
++                if (index != 12'd4095) begin
++                    f_en = 1'b1; f_addr = index + 12'd1;
++                    px_en = 1'b1; px_addr = index + 12'd1;
++                    py_en = 1'b1; py_addr = index + 12'd1;
++                end
+             end
+             default: begin end
+         endcase
+@@ -329,9 +351,7 @@
+ 
+             f_hold <= 16'sd0;
+             px_cur_hold <= 16'sd0; py_cur_hold <= 16'sd0;
+-            px_prev_hold <= 16'sd0; py_prev_hold <= 16'sd0;
+             div_hold <= 18'sd0;
+-            weighted_hold <= 32'sd0;
+ 
+             u_here <= 16'sd0; u_below <= 16'sd0; u_right <= 16'sd0;
+             px_grad_hold <= 16'sd0; py_grad_hold <= 16'sd0;
+@@ -367,16 +387,9 @@
+                     state <= S_U_CAPTURE_PREV;
+                 end
+                 S_U_CAPTURE_PREV: begin
+-                    px_prev_hold <= first_row ? 16'sd0 : $signed(px_dout);
+-                    py_prev_hold <= first_col ? 16'sd0 : $signed(py_dout);
+-                    state <= S_U_DIV;
+-                end
+-                S_U_DIV: begin
++                    // px_dout/py_dout now hold neighbors from S_U_READ_PREV;
++                    // calculate signed 18-bit divergence at this same edge.
+                     div_hold <= px_cur_ext + py_cur_ext - px_prev_ext - py_prev_ext;
+-                    state <= S_U_WEIGHT;
+-                end
+-                S_U_WEIGHT: begin
+-                    weighted_hold <= $signed(div_hold) * 32'sd20;
+                     state <= S_U_WRITE;
+                 end
+                 S_U_WRITE: begin
+@@ -385,7 +398,7 @@
+                         state <= S_G_READ_HERE;
+                     end else begin
+                         index <= index + 1'b1;
+-                        state <= S_U_READ_CUR;
++                        state <= S_U_READ_PREV;
+                     end
+                 end
+ 
+@@ -474,16 +487,7 @@
+                     state <= S_F_CAPTURE_PREV;
+                 end
+                 S_F_CAPTURE_PREV: begin
+-                    px_prev_hold <= first_row ? 16'sd0 : $signed(px_dout);
+-                    py_prev_hold <= first_col ? 16'sd0 : $signed(py_dout);
+-                    state <= S_F_DIV;
+-                end
+-                S_F_DIV: begin
+                     div_hold <= px_cur_ext + py_cur_ext - px_prev_ext - py_prev_ext;
+-                    state <= S_F_WEIGHT;
+-                end
+-                S_F_WEIGHT: begin
+-                    weighted_hold <= $signed(div_hold) * 32'sd20;
+                     state <= S_F_WRITE;
+                 end
+                 S_F_WRITE: begin
+@@ -492,7 +496,7 @@
+                         state <= S_DONE;
+                     end else begin
+                         index <= index + 1'b1;
+-                        state <= S_F_READ_CUR;
++                        state <= S_F_READ_PREV;
+                     end
+                 end
+                 S_DONE: begin

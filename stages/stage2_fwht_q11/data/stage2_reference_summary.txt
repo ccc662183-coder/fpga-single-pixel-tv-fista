@@ -1,0 +1,44 @@
+STAGE 2A | Q5.11 FWHT adapter reference
+========================================
+
+Source of truth:
+  stage0_2_fixedpoint_package / cat64 / golden_vectors.npz
+  Stage-4 rtl/fwht_inplace.v (copied unchanged)
+
+Verified mapping:
+  The flattened 4096-point Sylvester FWHT exactly matches the separable
+  64x64 row-major Stage-0.2 transform.
+  Legacy 8-bit Stage-4 input/output vectors also match the same 4096-point
+  natural Sylvester ordering.
+
+Input:
+  4096 signed Q5.11 values, loaded as sign-extended S32.F11.
+  min=8, max=1542, sum=3930619
+
+Raw H_4096 output:
+  min=-163469, max=3930619,
+  max_abs=3930619, sum=4177920
+
+Normalized W=H_4096/64 output:
+  arithmetic shift right by 6 (>>> 6), matching Python integer >> 6.
+  min=-2555, max=61415,
+  max_abs=61415, sum=63238
+
+Stage-2B follow-on golden vectors (not exercised by Stage-2A testbench):
+  mask population=1024/4096
+  packed measurement count=1024
+  measurements are signed S32.F11, ascending row-major mask-index order.
+  zero-filled backprojection H(y)/64 matches direct_q11 exactly.
+  one data-consistency step from z=direct_q11:
+    residual nonzero count=536
+    residual range=[-33,1]
+    adjoint range=[-9,1]
+    projected range=[77,1565]
+    projected differs from direct at 3963 pixels,
+    max absolute difference=9 Q5.11 LSB.
+
+Important:
+  - This package is Stage-2A only: one Q5.11 input -> raw FWHT -> normalized output.
+  - Stage-2B measurement projection and adjoint control are not implemented yet.
+  - No FPGA board programming or physical optical measurement is included.
+  - Original Stage-4 project is not modified.

@@ -1,0 +1,5 @@
+Q5.11
+128 vectors
+Python integer sqrt (math.isqrt) / division rounding
+max_abs_component_error_vs_float = 0.000270815
+No RTL simulation has been executed by the assistant; use Vivado 2019.2.

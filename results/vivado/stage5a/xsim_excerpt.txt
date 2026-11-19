@@ -1,0 +1,8 @@
+Source: vivado_project/sp_stage5a_ax7020_uart.sim/sim_1/behav/xsim/simulate.log
+Selected lines from the archived log; not a fresh XSim run.
+
+PASS: Stage-5A GET_STATUS -> 1000000 bps
+PASS: Stage-5A binary 8-byte echo incl A5 5A 00 FF
+PASS: Stage-5A full 256-byte payload echo, CRC exact
+PASS: Stage-5A bad-CRC rejection and recovery
+ALL TESTS PASSED: Stage-5A AX7020 UART 50MHz link verification

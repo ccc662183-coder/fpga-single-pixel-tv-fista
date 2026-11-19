@@ -1,0 +1,6 @@
+stage,luts,flip_flops,bram_tiles,dsps,resource_basis,routed_wns_ns,routed_whs_ns,resource_evidence
+Stage-3,3716,900,25,4,post-route,8.251,0.089,vivado/stage3/stage3d_utilization_postroute.rpt
+Stage-4A,3852,908,25,4,Vivado utilization screenshot (run phase not shown),7.670,0.120,vivado/stage4a/utilization.png
+Stage-4B,4231,967,25,4,post-synthesis,7.562,0.105,vivado/stage4b/tv_fista_top_q11_utilization_synth.rpt
+Stage-4C,4230,934,25,4,post-synthesis,7.245,0.081,vivado/stage4c/tv_fista_top_q11_utilization_synth.rpt
+Stage-5B,5140,1528,26,4,post-synthesis (includes UART),8.057,0.084,vivado/stage5b/stage5b_uart_fista_top_utilization_synth.rpt

@@ -1,0 +1,26 @@
+Stage-2A design notes
+=====================
+
+Architecture:
+  host/load port -> fwht_q11_stage2 adapter -> unchanged fwht_inplace core
+  core internal memory: 4096 x 32-bit signed S32.F11, inferred as BRAM
+  readback raw H coefficient
+  normalization: signed arithmetic shift >>> 6
+  readback normalized W coefficient remains 32-bit S32.F11
+
+Why keep 32-bit after normalization:
+  Stage-0.2 defines normalized coefficients, measurements, and residuals as
+  signed 32-bit with 11 fractional bits. Some normalized coefficients exceed
+  signed 16-bit Q5.11 range (cat64 maximum is 61415), so they must not be
+  narrowed to 16 bits.
+
+Core reuse:
+  The existing Stage-4 FWHT source is copied unchanged. The wrapper only
+  exposes the raw and normalized readback values.
+  Stage-2B will use the same core for forward transform and adjoint transform
+  sequentially; it will not instantiate two FWHT engines.
+
+Mask/data convention:
+  1024 measured coefficients are stored in ascending row-major flattened
+  index order. mask_4096_rowmajor.mem and measurement_indices_1024.txt
+  are checked against Stage-0.2 golden_vectors.npz.

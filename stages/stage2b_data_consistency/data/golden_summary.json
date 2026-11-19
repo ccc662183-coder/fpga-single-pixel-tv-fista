@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "name": "direct",
+      "output_min": 77,
+      "output_max": 1565,
+      "output_sum": 3932630,
+      "nonzero_residual": 536,
+      "max_abs_residual": 33
+    },
+    {
+      "name": "original",
+      "output_min": 8,
+      "output_max": 1542,
+      "output_sum": 3930619,
+      "nonzero_residual": 0,
+      "max_abs_residual": 0
+    },
+    {
+      "name": "perturbed",
+      "output_min": 80,
+      "output_max": 1561,
+      "output_sum": 3932608,
+      "nonzero_residual": 825,
+      "max_abs_residual": 32
+    },
+    {
+      "name": "zero",
+      "output_min": 77,
+      "output_max": 1566,
+      "output_sum": 3932603,
+      "nonzero_residual": 1023,
+      "max_abs_residual": 61415
+    }
+  ],
+  "mask_count": 1024,
+  "measurements": 1024,
+  "numeric": "Q5.11 inputs and outputs, S32.F11 intermediate FWHT / residual / measurement",
+  "algorithm": "v = z - (H4096 * (mask * ((H4096*z >> 6) - y))) >> 6"
+}

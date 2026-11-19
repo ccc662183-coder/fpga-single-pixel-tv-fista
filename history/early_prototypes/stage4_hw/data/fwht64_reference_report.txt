@@ -1,0 +1,12 @@
+STAGE 4: INTEGER FWHT SOFTWARE REFERENCE ONLY (NOT FPGA SIMULATION)
+Source image: cat64.png; 64x64 8-bit gray, derived from held-out cat photo
+Measurement: synthetic / mathematical Hadamard transform; NOT optical data
+Vector length: 4096 (64x64); output: 32-bit signed two-complement hex
+Transform: unnormalized Sylvester FWHT on row-major flattened image
+Equivalence: 1-D 4096 FWHT == separable 2-D 64x64 FWHT, verified independently
+Round trip: FWHT(FWHT(image)) = 4096 * image (exact integer)
+Input range: 1..192; coefficient range: -20363..489415
+Input data SHA256: e748e2bc698cbdd6a9a490dd64c462751c022ec53d3fa46de78bdc1d4b0ef73d
+Expected data SHA256: 40812eed122468cc154ab534bf617e4e125f6b2380786a23cafa0e5124ace754
+Expected simulation testbench output: PASS forward 4096 / 4096; PASS roundtrip 4096 / 4096
+This preparer does not run RTL; run the supplied testbench in Vivado to verify hardware logic.

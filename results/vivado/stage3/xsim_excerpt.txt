@@ -1,0 +1,9 @@
+Source: vivado_project/sp_tv_fista_stage3.sim/sim_1/behav/xsim/simulate.log
+Selected lines from the archived log; not a fresh XSim run.
+
+PASS: exact 40-iteration TV-FISTA final reconstruction
+PASS: output pixels 4096/4096 exact; errors=0
+PASS: range_error=0, protocol_error=0
+PASS: outer iterations=40, compute cycles=560631327
+PASS: final output range=[81,1526], sum=3930589
+ALL TESTS PASSED: Stage-3 TV-FISTA top-level integration

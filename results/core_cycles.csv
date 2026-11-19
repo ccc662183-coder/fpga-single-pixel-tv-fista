@@ -1,0 +1,5 @@
+stage,cycles,core_seconds_50mhz,full_run_evidence
+Stage-3,560631327,11.21262654,vivado/stage3/xsim_excerpt.txt
+Stage-4A,457412127,9.14824254,vivado/stage4a/xsim_full_screenshot_transcript.txt
+Stage-4B,260622701,5.21245402,vivado/stage4b/xsim_full_excerpt.txt
+Stage-4C,242929421,4.85858842,vivado/stage4c/xsim_excerpt.txt

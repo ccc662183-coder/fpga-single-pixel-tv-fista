@@ -1,0 +1,13 @@
+STAGE 5C 8x8 fixed-point TV prox verification vectors
+Source: astronaut 8x8 grayscale resize, pixels in Q5.11
+LAM=20/2048=0.009765625, INNER STEPS=3
+Q11 arithmetic: u=f+(LAM*div(p) >>> 11), floor shifts on negatives.
+v=p+trunc(256*grad(u)/20), signed division truncates toward zero.
+project(v)=v/max(1,|v|), sqrt floor + rounded positive magnitude quotient.
+Dual p_x last row and p_y last col are clamped to 0.
+All dual values updated simultaneously per iteration (Jacobi), not in-place.
+EXPECTED_Q11_SUM = 59613
+EXPECTED_Q11_MINMAX = (174, 1748)
+NOTE: This is a fixed-point APPROXIMATION to Stage-2 TV proximal inner loop,
+not the full floating-point 40x35 TV-FISTA image reconstruction.
+Python model checked vector lengths and numeric bounds; RTL requires Vivado simulation.

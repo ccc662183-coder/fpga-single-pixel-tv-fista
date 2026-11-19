@@ -1,0 +1,5 @@
+﻿image,source_file,resolution,measurement_count,measurement_ratio,lambda,outer_iterations,tv_inner_iterations,direct_psnr_db,tv_fista_psnr_db,psnr_gain_db,python_elapsed_s,measurement_source
+cat64_stage4_exact,cat64.png,64x64,1024,0.25,0.01,40,35,27.082795620910566,28.432731928014423,1.3499363071038566,0.11772354499998983,synthetic Hadamard transform; no optical acquisition
+moon,moon.png,64x64,1024,0.25,0.01,40,35,34.856863447979464,36.309444230154824,1.4525807821753602,0.1328259800000069,synthetic Hadamard transform; no optical acquisition
+rocket,rocket.png,64x64,1024,0.25,0.01,40,35,29.56300504544074,33.63104337355756,4.06803832811682,0.12319810400003917,synthetic Hadamard transform; no optical acquisition
+text,text.png,64x64,1024,0.25,0.01,40,35,26.19985377070895,26.466064293395064,0.2662105226861158,0.11952504999999292,synthetic Hadamard transform; no optical acquisition

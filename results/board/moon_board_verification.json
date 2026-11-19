@@ -1,0 +1,113 @@
+{
+  "stage": "5B",
+  "dataset": "moon",
+  "baud": 1000000,
+  "measurement_count": 1024,
+  "pixel_count": 4096,
+  "outer_iterations_configured": 40,
+  "hardware": "AX7020 PL UART TV-FISTA; not a software reconstruction",
+  "chunks": [
+    {
+      "index": 0,
+      "words": 63,
+      "ack_count": 63
+    },
+    {
+      "index": 1,
+      "words": 63,
+      "ack_count": 126
+    },
+    {
+      "index": 2,
+      "words": 63,
+      "ack_count": 189
+    },
+    {
+      "index": 3,
+      "words": 63,
+      "ack_count": 252
+    },
+    {
+      "index": 4,
+      "words": 63,
+      "ack_count": 315
+    },
+    {
+      "index": 5,
+      "words": 63,
+      "ack_count": 378
+    },
+    {
+      "index": 6,
+      "words": 63,
+      "ack_count": 441
+    },
+    {
+      "index": 7,
+      "words": 63,
+      "ack_count": 504
+    },
+    {
+      "index": 8,
+      "words": 63,
+      "ack_count": 567
+    },
+    {
+      "index": 9,
+      "words": 63,
+      "ack_count": 630
+    },
+    {
+      "index": 10,
+      "words": 63,
+      "ack_count": 693
+    },
+    {
+      "index": 11,
+      "words": 63,
+      "ack_count": 756
+    },
+    {
+      "index": 12,
+      "words": 63,
+      "ack_count": 819
+    },
+    {
+      "index": 13,
+      "words": 63,
+      "ack_count": 882
+    },
+    {
+      "index": 14,
+      "words": 63,
+      "ack_count": 945
+    },
+    {
+      "index": 15,
+      "words": 63,
+      "ack_count": 1008
+    },
+    {
+      "index": 16,
+      "words": 16,
+      "ack_count": 1024
+    }
+  ],
+  "load_time_s": 0.097463,
+  "compute_poll_elapsed_s": 3.636642,
+  "compute_cycles": 172124141,
+  "compute_time_50mhz_s": 3.44248282,
+  "final_outer_iter_index": 39,
+  "completed_outer_iterations": 40,
+  "final_outer_iter": 40,
+  "status_poll_count": 19,
+  "result_read_time_s": 0.113018,
+  "output_sha256": "bde6ec3c27654ec3fc35581007fdb23c67cea1c198595c53f3958d998f70ebd8",
+  "mismatch_count": 0,
+  "first_mismatches": [],
+  "pixel_min": 170,
+  "pixel_max": 1803,
+  "pixel_sum": 3690068,
+  "elapsed_s": 4.133282,
+  "all_pass": true
+}

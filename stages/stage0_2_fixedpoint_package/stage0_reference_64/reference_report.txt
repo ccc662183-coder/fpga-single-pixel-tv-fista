@@ -1,0 +1,26 @@
+64x64 TV-FISTA floating-point golden reference
+Status: SOFTWARE REFERENCE ONLY; not FPGA execution and not optical acquisition.
+Resolution: 64x64; pixels=4096
+Measurements: 1024/4096 (25%)
+Transform: W = H_4096 / 64 = separable H_64 on rows and columns / 64.
+Hadamard order: Sylvester natural order; image flattening: row-major.
+Mask: same low-sequency construction as previous Stage-1/2/3 scripts, regenerated at 64x64.
+Mask SHA256: 2c90bf18625089b847b93229bfe1e3fcabc9cfd0d6342a9fec2ed0bbf4488069
+TV model: 0.5*||P W x - y||_2^2 + 0.01*isotropic_TV(x).
+TV proximal solver: projected dual-gradient approximation; zero forward-difference boundary.
+FISTA outer iterations: 40; TV proximal inner steps: 35.
+Gradient Lipschitz constant L=1 because W is orthonormal and P is a row selector.
+FWHT round-trip max error: 1.110e-15
+Gradient/divergence adjoint identity error: 1.137e-13
+Stage-4 vector cross-check: PASS: input and all 4096 expected FWHT coefficients exactly match Stage-4 vectors
+Integer measurement export: unnormalized H_4096(image_u8), selected by row-major mask; signed int32 hex.
+Important: integer unnormalized coefficients are exported for interface development only; the fixed-point TV-FISTA arithmetic scaling is not yet frozen.
+
+=== Metrics ===
+cat64_stage4_exact: direct=27.0828 dB; TV-FISTA=28.4327 dB; gain=+1.3499 dB; python=0.118s
+moon: direct=34.8569 dB; TV-FISTA=36.3094 dB; gain=+1.4526 dB; python=0.133s
+rocket: direct=29.5630 dB; TV-FISTA=33.6310 dB; gain=+4.0680 dB; python=0.123s
+text: direct=26.1999 dB; TV-FISTA=26.4661 dB; gain=+0.2662 dB; python=0.120s
+
+Do not interpret Python elapsed time as FPGA latency.
+The 64x64 mask is a newly generated 64x64 mask; it is not the 128x128 mask cropped.

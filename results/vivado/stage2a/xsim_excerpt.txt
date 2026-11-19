@@ -1,0 +1,9 @@
+Source: vivado_project/sp_fwht_q11_stage2.sim/sim_1/behav/xsim/simulate.log
+Selected lines from the archived log; not a fresh XSim run.
+
+PASS: raw FWHT 4096/4096 exact, signed S32.F11
+PASS: normalized FWHT 4096/4096 exact, arithmetic >>> 6
+PASS: raw range=[-163469,3930619], sum=4177920
+PASS: normalized range=[-2555,61415], sum=63238
+PASS: compute cycles=98305
+ALL TESTS PASSED: Stage-2A Q5.11 FWHT adapter

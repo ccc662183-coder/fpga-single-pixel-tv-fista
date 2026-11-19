@@ -1,0 +1,3 @@
+Stage-5D 1.0
+Host GUI: PySide6, UART protocol: Stage-5B frozen, PL algorithm unchanged Stage-4C
+GUI physical-board verification: pending user Windows run

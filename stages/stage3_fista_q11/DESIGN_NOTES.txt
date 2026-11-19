@@ -1,0 +1,70 @@
+Stage-3 TV-FISTA integration design notes
+=========================================
+
+Purpose
+-------
+Integrate the already verified Stage-1 TV Prox and Stage-2B data-consistency
+engines into a complete fixed-point FISTA outer loop. All algorithmic arithmetic
+is in PL. The interface loads 1024 signed measurements and reads back 4096
+reconstructed pixels. This is a compute IP, not yet an AX7020 board top/UART.
+
+Exact Stage-0.2 order
+--------------------
+1. x0 = z0 = W^T y.
+   Initialization is a dedicated mode: zero-fill a 4096-point coefficient
+   vector, place packed y at the 1024 selected mask positions, run H_4096,
+   then arithmetic >>> 6. Do NOT use the normal Stage-2B z=0 gradient mode as
+   a substitute; negative arithmetic shifts can differ by 1 LSB.
+2. For k = 0..39:
+     c = (H_4096 z_k) >>> 6
+     r[i] = mask[i] ? (c[i] - y[rank(i)]) : 0
+     g = (H_4096 r) >>> 6
+     v = z_k - g
+     x_(k+1) = TVProx_35(v)
+     z_(k+1) = x_(k+1) + (((x_(k+1)-x_k)*beta_q15[k]) >>> 15)
+3. After all 40 iterations, output clip(x_40, 0, 2048).
+
+Fixed-point rules
+-----------------
+- x, z, TV input/output: signed 16-bit Q5.11.
+- FWHT, measurement, residual: signed 32-bit with 11 fractional bits.
+- FWHT normalization only after the full 12-stage transform: arithmetic >>> 6.
+- TV lambda constant: 20 (Q5.11 representation of 20/2048).
+- TV inner iterations: 35.
+- FISTA beta: exact 40-entry UQ0.15 ROM from Stage-0.2.
+- Momentum product uses a 34-bit signed intermediate and arithmetic >>> 15.
+- No intermediate clipping is inserted; final output only is clipped to [0,2048].
+
+Architecture
+------------
+- data_consistency_fista_q11: Stage-2B engine plus a direct W^T*y init mode.
+  One FWHT core is reused for init, forward, and adjoint passes.
+- tv_prox64_bram_q11: unchanged Stage-1 TV Prox module.
+- tv_fista_top_q11: measurement loader, initial x/z buffers, BRAM streaming,
+  FISTA beta/momentum controller, final clipped readout.
+- Stage-1 and Stage-2B source projects remain unchanged; Stage-3 has its own
+  copies and a Stage-3-specific data-consistency extension.
+
+Expected BRAM budget (rough estimate)
+-------------------------------------
+Stage-1 TV Prox: 14 BRAM Tile
+Stage-2B data consistency: 9 BRAM Tile
+Stage-3 x/z state memories: approximately 4 BRAM Tile
+Total estimate: approximately 27/140 BRAM Tile, before final synthesis.
+This is an estimate, not a measured Stage-3 result.
+
+Verification plan
+-----------------
+- First: one-iteration integration test (OUTER_ITERS=1), 4096/4096 exact.
+- Then: complete 40-iteration cat64 golden test, 4096/4096 exact.
+- Full four-image tests can follow after cat64 passes.
+- Only after functional verification: synthesis, post-route timing, then board I/O.
+
+Limitations
+-----------
+- No AXI, PS, DDR, UART, physical single-pixel sensor, or board-level XDC yet.
+- Measurement mask is fixed to the Stage-0.2 25% low-sequency mask.
+- The top enforces sequential measurement load addresses 0..1023.
+- TV Prox's existing RTL has no exported internal overflow flag. The standalone
+  Stage-1 reference tests cover its arithmetic; full Stage-3 comparison is still
+  required to validate every iteration end-to-end.

@@ -1,0 +1,17 @@
+Stage 5A | TV gradient/divergence integer reference
+Image: included cat64.png resized to 16x16 grayscale
+Domain: 8-bit pixels; signed 12-bit constructed dual field
+Vector count: 256; width=16; height=16
+Definitions:
+  gx(r,c) = x(r,c+1)-x(r,c), last col zero
+  gy(r,c) = x(r+1,c)-x(r,c), last row zero
+  div(p) = px(r,c)-px(r,c-1)+py(r,c)-py(r-1), boundary terms zero
+  div = negative adjoint of the forward gradient
+  p=(gx,gy)*20 solely for numeric testing; this is not actual FISTA p
+  <Gx,p>  = 5838140
+  <x,div> = -5838140
+  identity sum = 0
+  max |gx| = 84; max |gy| = 85; max |div| = 4060
+Validation: arithmetic and six memory files checked in Python.
+No RTL simulation or FPGA synthesis performed by this script.
+TV proximal operator, projection, FISTA momentum and memory supply are NOT implemented.

@@ -1,0 +1,77 @@
+{
+  "image": "cat64",
+  "shape": [
+    64,
+    64
+  ],
+  "measurements": 1024,
+  "outer_iters": 40,
+  "tv_inner_steps": 35,
+  "beta_q15": [
+    0,
+    9232,
+    14223,
+    17402,
+    19621,
+    21264,
+    22533,
+    23544,
+    24369,
+    25057,
+    25638,
+    26137,
+    26569,
+    26948,
+    27282,
+    27580,
+    27846,
+    28087,
+    28304,
+    28502,
+    28684,
+    28850,
+    29003,
+    29144,
+    29275,
+    29397,
+    29511,
+    29617,
+    29716,
+    29810,
+    29897,
+    29980,
+    30058,
+    30132,
+    30201,
+    30268,
+    30330,
+    30390,
+    30447,
+    30501
+  ],
+  "initial_direct": {
+    "min": 76,
+    "max": 1565,
+    "sum": 3928507
+  },
+  "iter1_projected": {
+    "min": 77,
+    "max": 1565,
+    "sum": 3932630
+  },
+  "iter1_prox": {
+    "min": 108,
+    "max": 1530,
+    "sum": 3930561,
+    "overflow": 0
+  },
+  "iter1_beta": 0,
+  "iter1_momentum_delta_max_abs": 0,
+  "final_clipped": {
+    "min": 81,
+    "max": 1526,
+    "sum": 3930589
+  },
+  "stage2b_projected_vector_exact_match": true,
+  "official_stage0_2_final_vector_exact_match": true
+}
